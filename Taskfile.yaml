@@ -41,16 +41,28 @@ tasks:
   check:
     desc: Run whole test suite.
     deps:
+      - check:bandit
       - check:flake8
       - check:mypy
       - check:pylint
+#      - check:pytest
       - check:safety
+
+  check:pytest:
+    desc: Run pytest suite.
+    deps:
+      - poetry:install
+      - check:prepare
     cmds:
-      - poetry run python {{.FILE}}
+      - poetry run pytest --memray --junitxml={{.JUNIT_FILE}} --cov-report term  --cov-report xml:{{.COVERAGE_FILE}} --cov-report html:{{.COVERAGE_DIR}} --cov={{.PACKAGE}}
+      - poetry run genbadge coverage -l -i {{.COVERAGE_FILE}} -o {{.BADGE_COVERAGE}}
+      - poetry run genbadge tests -l -i {{.JUNIT_FILE}} -o {{.BADGE_TESTS}}
     vars:
-      FILE:
-        sh: git ls-files --other --modified --exclude-standard
-    ignore_error: true
+      JUNIT_FILE: ./{{.DIST_DIR}}/junit-pytest.xml
+      COVERAGE_FILE: ./{{.DIST_DIR}}/coverage.xml
+      COVERAGE_DIR: ./{{.DIST_DIR}}/coverage
+      BADGE_COVERAGE: ./{{.DIST_DIR}}/badge-coverage.svg
+      BADGE_TESTS: ./{{.DIST_DIR}}/badge-tests.svg
 
   check:pylint:
     desc: Check source code with pylint.
@@ -81,7 +93,18 @@ tasks:
       - poetry:install
       - check:prepare
     cmds:
-      - poetry run safety check -i 49150 -i 51358 -i 51499
+      - poetry run safety check -i 48547 -i 51358 -i 51499
+
+  check:bandit:
+    desc: Check source code with bandit.
+    deps:
+      - poetry:install
+      - check:prepare
+    cmds:
+      - poetry run bandit --exit-zero -r {{.PACKAGE}}
+      - poetry run bandit --format xml -r {{.PACKAGE}} -o {{.JUNIT_FILE}}
+    vars:
+      JUNIT_FILE: ./{{.DIST_DIR}}/junit-bandit.xml
 
   check:flake8:
     desc: Check source code with flake8.
