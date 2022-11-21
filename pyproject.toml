@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "eccenca-toolkit"
+version = "0.1.0"
+description = ""
+authors = ["Ranga Reddy Nukala <sairangareddy22@gmail.com>"]
+readme = "README.md"
+packages = [{include = "eccenca_toolkit"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+black = "^22.1.0"
+pylint-junit = "^0.3.2"
+safety = "^1.10.3"
+genbadge = "^1.0.6"
+flake8-formatter-junit-xml = "^0.0.6"
+typed-ast = "^1.5.2"
+mypy = "^0.931"
+coverage = "^6.3.2"
+defusedxml = "^0.7.1"
+pylint = "^2.14.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.MASTER]
+load-plugins="pylint_junit"
+
+[tool.pylint.General]
+ignore = "version.py"
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"
+disable = "fixme"
+
+# https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#pylint
+[tool.pylint.messages_control]
+disable = ["R0903", "C0103", "W0105"]
+
+[tool.pylint.format]
+max-line-length = "88"
+
+[tool.mypy]
+warn_return_any = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = ""
