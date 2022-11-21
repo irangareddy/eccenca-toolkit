@@ -1,7 +1,0 @@
-<?xml version="1.0" ?>
-<testsuites disabled="0" errors="0" failures="0" tests="1" time="0.0">
-	<testsuite disabled="0" errors="0" failures="0" name="flake8.eccenca_toolkit/__init___py" skipped="0" tests="1" time="0" file="eccenca_toolkit/__init__.py">
-		<testcase name="Check passed" file="eccenca_toolkit/__init__.py"/>
-	</testsuite>
-</testsuites>
-
